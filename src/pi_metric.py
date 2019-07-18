@@ -191,7 +191,7 @@ def show_weather():
 
     light_uped = []
 
-    if condition == "800" or condition == "801" or condition == "802":
+    if condition == "800" or condition == "801":
         show_icon(icons.get("weather-sunny"))
     elif condition[0] == "8":
         show_icon(icons.get("weather-cloudy"))
