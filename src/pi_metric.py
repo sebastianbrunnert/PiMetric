@@ -240,20 +240,25 @@ try:
             show_time()
             tick += 1
         elif tick == 3:
-            # use a unused tick to load data from the web, so the display isn't unlighted for a moment
-            data = requests.get("http://api.openweathermap.org/data/2.5/weather?lat={}&lon={}&APPID={}&units=metric".format(location[0], location[1], open_weather_map_appid)).json()
-            temp = str(int(round(data["main"]["temp"])))
-            condition = str(data["weather"][0]["id"])
-            tick += 1
+            try:
+                # use a unused tick to load data from the web, so the display isn't unlighted for a moment
+                data = requests.get("http://api.openweathermap.org/data/2.5/weather?lat={}&lon={}&APPID={}&units=metric".format(location[0], location[1], open_weather_map_appid)).json()
+                temp = str(int(round(data["main"]["temp"])))
+                condition = str(data["weather"][0]["id"])
+                tick += 1
+            except Exception as e:
+                pass
         elif tick == 12:
-	    if use_mail:
-            	# use  a unused tick to load data from IMAP client, so the display isn't unlighted for a moment
-            	imap = imaplib.IMAP4_SSL(imap4_ssl)
-            	imap.login(mail_username, mail_password)
-            	imap.select("INBOX")
-            	type, data = imap.uid('search', "UNSEEN")
-            	unread_mails = str(len(data[0].split()))
-
+            if use_mail:
+                try:
+                	# use  a unused tick to load data from IMAP client, so the display isn't unlighted for a moment
+                	imap = imaplib.IMAP4_SSL(imap4_ssl)
+                	imap.login(mail_username, mail_password)
+                	imap.select("INBOX")
+                	type, data = imap.uid('search', "UNSEEN")
+                	unread_mails = str(len(data[0].split()))
+                except Exception as e:
+                    pass
             tick+=1
         elif tick == 9:
             show_weather()
@@ -273,4 +278,3 @@ try:
         time.sleep(1)
 except KeyboardInterrupt:
     device.clear()
-
