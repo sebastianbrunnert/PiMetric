@@ -56,6 +56,15 @@ Normally some 8x8 pieces of the matrix should be activated.
 - if you want to show the number of unread mails on the PiMetric set the var use_mail to True and change imap4_ssl to the imap adress of your mail provider (e.g. Gmail: imap.gmail.com), mail_username to your mail adress and mail_password to your password - !! you also have to allow acces from 3rd Apps https://myaccount.google.com/security and allow IMAP in the Gmail settings !!
 - $ python pi_metric.py
 
+If you have enabled mail support, you have to notice that it's technically speaking not possible (or rather very very complex; google a little bit about IMAP) to detect, in which category (e.g. Primary, Promotions) a mail was send.
+So if you want to don't show mails from promotions follow these steps (this tutorial is for gmail, other large mail providers surely have these features too):
+
+- go to the gmail settings
+- navigate to filters
+- create a new filter 
+- type "category:promotions" into the field "includes the words"
+- click on create filter and select "mark as read"
+
 
 # Todo
 
