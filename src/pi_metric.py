@@ -93,6 +93,7 @@ icons = {
     "weather-snow": [0,3,4,7,9,11,12,14,18,21,24,25,27,28,30,31,32,33,35,36,38,39,42,45,49,51,52,54,56,59,60,63],
     "weather-atmosphere": [54,53,52,51,50,39,38,37,36,34,33,32,17,18,19,20,21],
     "weather-thunderstorm": [4,5,6,11,12,13,18,19,20,25,26,27,35,36,37,43,44,50,51,58],
+    "weather-night": [2,3,4,5,9,10,11,14,16,17,18,24,25,26,32,33,34,40,41,42,43,47,49,50,51,52,53,54,58,59,60,61],
     "mail": [8,9,10,11,12,13,14,15,16,17,18,21,22,23,24,26,27,28,29,31,32,35,36,39,40,47,48,49,50,51,52,53,54,55]
 }
 
@@ -191,7 +192,9 @@ def show_weather():
 
     light_uped = []
 
-    if condition == "800" or condition == "801":
+    if condition == "NIGHT":
+        show_icon(icons.get("weather-night"))
+    elif condition == "800" or condition == "801":
         show_icon(icons.get("weather-sunny"))
     elif condition[0] == "8":
         show_icon(icons.get("weather-cloudy"))
@@ -242,9 +245,16 @@ try:
         elif tick == 3:
             try:
                 # use a unused tick to load data from the web, so the display isn't unlighted for a moment
+                # algorithm for weather detection with regard to the sunset
                 data = requests.get("http://api.openweathermap.org/data/2.5/weather?lat={}&lon={}&APPID={}&units=metric".format(location[0], location[1], open_weather_map_appid)).json()
                 temp = str(int(round(data["main"]["temp"])))
-                condition = str(data["weather"][0]["id"])
+                if str(data["weather"][0]["icon"])[-1] == "n":
+                    if str(data["weather"][0]["id"])[0] != "8":
+                        condition = str(data["weather"][0]["id"])
+                    else:
+                        condition = "NIGHT"
+                else:
+                    condition = str(data["weather"][0]["id"])
                 tick += 1
             except Exception as e:
                 pass
